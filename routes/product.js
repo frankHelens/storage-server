@@ -17,9 +17,13 @@ router.route('/')
     })
   })
   .post((req, res) => {
+    // console.log(Object.assign(req.body, {
+    //   totalNum: Number(req.body.storeNum) + Number(req.body.productNum)
+    // }))
     fetchCreate({
       model: Product,
       data: req.body
+        // totalNum: req.body.storeNum + req.body.productNum
     })
     .then((data) => {
       res.send(data)
