@@ -33,7 +33,7 @@
 //   }
 // }
 
-export function Message (code, data, message) {
+export const Message = (code, data, message) => {
   return {
     code: code,
     data: data,
@@ -84,3 +84,42 @@ export const getFilterByList = (filterBy) => {
   return filterObj
 }
 
+
+export const getRelationList = (relation) => {
+  let relationList = {}
+  groupFormat(relation, 'name').map(item => {
+    relationList[item.id] = item.options.map(option => {
+      return {
+        value: option.value,
+        label: option.label
+      }
+    })
+  })
+  console.log(relationList)
+  return relationList
+}
+
+
+export const groupFormat = (arr, id) => {
+  var map = {}
+  var dest = []
+  for (var i = 0; i < arr.length; i++) {
+    var ai = arr[i]
+    if (!map[ai[id]]) {
+      dest.push({
+        id: ai[id],
+        options: [ai]
+      })
+      map[ai[id]] = ai
+    } else {
+      for (var j = 0; j < dest.length; j++) {
+        var dj = dest[j]
+        if (dj.id === ai[id]) {
+          dj.options.push(ai)
+          break
+        }
+      }
+    }
+  }
+  return dest
+}

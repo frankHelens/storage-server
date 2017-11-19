@@ -1,5 +1,5 @@
 import express from 'express'
-//引入数据库Message模块
+//引入数据库Product模块
 import Product from '../Model/product'
 // 引入处理数据的api
 import { fetchList, fetchCreate, fetchUpdate, fetchDelete } from '../utils/api'

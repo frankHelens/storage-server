@@ -20,6 +20,9 @@ const Product = schema.define('product', {
   unit: {
     type: Sequelize.STRING(50)
   },
+  safeNum: {
+    type: Sequelize.INTEGER(255)
+  },
   productNum: {
     type: Sequelize.INTEGER(255)
   },
@@ -45,6 +48,6 @@ const Product = schema.define('product', {
 //   timestamps: false
 });
 // Product.drop(); //删除表
-Product.sync(); //创建表
+// Product.sync(); //创建表
 
 module.exports = Product;

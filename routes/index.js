@@ -3,6 +3,7 @@ import express from 'express'
 // import login from './login'
 import data from './data'
 import product from './product'
+import relation from './relation'
 
 const router = express.Router();
 
@@ -20,5 +21,6 @@ router.route('/')
 // router.use('/login', login)
 router.use('/data', data)
 router.use('/product', product)
+router.use('/relation', relation)
   
 module.exports = router;

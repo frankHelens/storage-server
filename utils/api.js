@@ -1,4 +1,9 @@
-import { Message, getFilterByList, getOrderByList } from './common'
+import {
+  Message,
+  getFilterByList,
+  getOrderByList,
+  getRelationList
+} from './common'
 
 /*
 * 通用查询方式
@@ -77,9 +82,25 @@ export const fetchDelete = (props) => {
   })
 }
 
+// 获取关联数据方法
+export const fetchRelation = (props) => {
+  const { model, data } = props
+  return model.findAll({
+    where: {
+      name: data.split(',')
+    }
+  })
+  .then((res) => {
+    return Message(0, getRelationList(res), null)
+  })
+  .catch((err) => {
+    console.log('err：', err)
+    return Message(500, null, '未知异常，请联系管理员！')
+  })
+}
+
 export const fetch = (props) => {
   const { model } = props
   return model.findAll()
 }
-
 
