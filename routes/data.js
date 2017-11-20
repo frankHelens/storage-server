@@ -16,7 +16,6 @@ router.route('/')
     })
   })
   .post((req, res) => {
-    console.log(req.body)
     fetchCreate({
       model: Product,
       data: {

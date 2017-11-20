@@ -95,7 +95,6 @@ export const getRelationList = (relation) => {
       }
     })
   })
-  console.log(relationList)
   return relationList
 }
 
