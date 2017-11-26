@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "babel-node ./bin/www"
+    "start": "babel-node ./bin/www",
+    "dev": "node-dev ./bin/www"
   },
   "dependencies": {
     "babel-cli": "^6.26.0",

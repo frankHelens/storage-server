@@ -2,7 +2,7 @@ import express from 'express'
 //引入数据库Product模块
 import Product from '../Model/product'
 // 引入处理数据的api
-import { fetchList, fetchCreate, fetchUpdate, fetchDelete } from '../utils/api'
+import { fetchList, fetchCreate, fetchUpdate, fetchDelete, fetchBatchDelete } from '../utils/api'
 
 const router = express.Router();
 
@@ -23,7 +23,15 @@ router.route('/')
     fetchCreate({
       model: Product,
       data: req.body
-        // totalNum: req.body.storeNum + req.body.productNum
+    })
+    .then((data) => {
+      res.send(data)
+    })
+  })
+  .delete((req, res) => {
+    fetchBatchDelete({
+      model: Product,
+      data: req.body
     })
     .then((data) => {
       res.send(data)

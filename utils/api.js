@@ -30,7 +30,7 @@ export const fetchList = (props) => {
   })
   .catch((err) => {
     console.log('err：', err)
-    return Message(500, null, '未知异常，请联系管理员！')
+    return Message(500, null)
   })
 }
 
@@ -43,7 +43,7 @@ export const fetchCreate = (props) => {
   })
   .catch((err) => {
     console.log('err：', err)
-    return Message(500, null, '未知异常，请联系管理员！')
+    return Message(500, null, err)
   })
 }
 
@@ -61,7 +61,7 @@ export const fetchUpdate = (props) => {
   })
   .catch((err) => {
     console.log('err：', err)
-    return Message(500, null, '未知异常，请联系管理员！')
+    return Message(500, null, err)
   })
 }
 
@@ -78,7 +78,24 @@ export const fetchDelete = (props) => {
   })
   .catch((err) => {
     console.log('err：', err)
-    return Message(500, null, '未知异常，请联系管理员！')
+    return Message(500, null)
+  })
+}
+
+// 批量删除
+export const fetchBatchDelete = (props) => {
+  const { model, data } = props
+  return model.destroy({
+    where: {
+      id: data
+    }
+  })
+  .then((res) => {
+    return Message(0, res.id, '批量删除成功！')
+  })
+  .catch((err) => {
+    console.log('err：', err)
+    return Message(500, null)
   })
 }
 
@@ -95,7 +112,7 @@ export const fetchRelation = (props) => {
   })
   .catch((err) => {
     console.log('err：', err)
-    return Message(500, null, '未知异常，请联系管理员！')
+    return Message(500, null)
   })
 }
 

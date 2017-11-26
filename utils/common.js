@@ -34,6 +34,14 @@
 // }
 
 export const Message = (code, data, message) => {
+  const errorInfo = '未知异常，请联系管理员！'
+  if (code === 500) {
+    message = message 
+    ? message.name === 'SequelizeValidationError'
+    ? '格式不正确！'
+    : errorInfo
+    : errorInfo
+  }
   return {
     code: code,
     data: data,

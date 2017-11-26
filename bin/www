@@ -1,8 +1,5 @@
-#!/usr/bin/env node
-
-/**
- * Module dependencies.
- */
+// 引入babel转码
+require('babel-core/register');
 
 var app = require('../app');
 var debug = require('debug')('storage-service:server');

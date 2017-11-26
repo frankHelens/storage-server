@@ -25,6 +25,6 @@ const Dictionaries = schema.define('dictionaries', {
   }
 });
 // Product.drop(); //删除表
-Dictionaries.sync(); //创建表
+// Dictionaries.sync(); //创建表
 
 module.exports = Dictionaries;
