@@ -99,6 +99,19 @@ export const fetchBatchDelete = (props) => {
   })
 }
 
+// 批量添加
+export const fetchBatchCreate = (props) => {
+  const { model, data } = props
+  return model.cbulkCreate(data)
+  .then((res) => {
+    return Message(0, res, '添加成功！')
+  })
+  .catch((err) => {
+    console.log('err：', err)
+    return Message(500, null, err)
+  })
+}
+
 // 获取关联数据方法
 export const fetchRelation = (props) => {
   const { model, data } = props

@@ -32,13 +32,6 @@ const EnterStock = schema.define('enter_stock', {
   remark: {
     type: Sequelize.STRING(255)
   }
-  // createdAt: Sequelize.BIGINT,
-  // updatedAt: Sequelize.BIGINT,
-  // version: Sequelize.BIGINT  
-// }, {
-//   timestamps: false
 });
-// EnterStock.drop(); //删除表
-// EnterStock.sync(); //创建表
 
 module.exports = EnterStock;
