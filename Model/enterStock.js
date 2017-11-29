@@ -34,4 +34,6 @@ const EnterStock = schema.define('enter_stock', {
   }
 });
 
+// EnterStock.sync(); //创建表
+
 module.exports = EnterStock;

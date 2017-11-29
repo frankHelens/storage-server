@@ -102,7 +102,7 @@ export const fetchBatchDelete = (props) => {
 // 批量添加
 export const fetchBatchCreate = (props) => {
   const { model, data } = props
-  return model.cbulkCreate(data)
+  return model.bulkCreate(data)
   .then((res) => {
     return Message(0, res, '添加成功！')
   })

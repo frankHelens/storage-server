@@ -18,7 +18,6 @@ router.route('/')
       res.send(data)
     })
   })
-
 // router.route('/:id')
 router.use('/detail', detail)
 

@@ -1,9 +1,10 @@
 import express from 'express'
-import EnterStock from '../../Model/enterStock'
-import EnterStockDetail from '../../Model/enterStockDetail'
+// import EnterStock from '../../Model/enterStock'
+// import EnterStockDetail from '../../Model/enterStockDetail'
 
-import { detailPost } from '../../Controller/enterStore'
-import { fetchCreate, fetchBatchCreate } from '../../utils/api'
+// import { codeCreate } from '../../Controller/enterStore'
+import { enterStoreCreate } from '../../Controller/enterStore'
+// import { fetchCreate, fetchBatchCreate } from '../../utils/api'
 
 const router = express.Router()
 
@@ -19,32 +20,69 @@ router.route('/')
         makePe: '黄大小',
         remark: '我是备注'
       },
-      data: [{
+      tableData: [{
         productId: 100,
-        stockNum: 200
+        enterNum: 200,
+        discount: 100,
+        remark: '这个是单个的商品价格1'
+      }, {
+        productId: 200,
+        enterNum: 2,
+        discount: 100,
+        remark: '这个是单个的商品价格2'
+      }, {
+        productId: 300,
+        enterNum: 3,
+        discount: 100,
+        remark: '这个是单个的商品价格3'
       }]
     }
-    fetchCreate({
-      model: EnterStock,
-      data: detailPost(test)
+    // todo
+    enterStoreCreate(test)
+    .then((data) => {
+      res.send(data)
     })
-    .then(baseRes => {
-      if (baseRes.code === 0) {
-        createData(test)
-      } else {
-        res.send(baseRes)
-      }
-      // res.send(data)
-    })
+    // codeCreate()
+    // .then((code) => {
+    //   let { base, data } = test
+    //   base.code = code
+    //   data.map(item => {
+    //     item.code = code
+    //     return item
+    //   })
+    //   return test
+    // })
+    // .then((test) => {
+    //   setProducts(test.data, res)
+    //   .then(() => {
+    //     setBaseData(test.base, res)
+    //   })
+    // })
   })
 
-function createData (test) {
-  const data = test.data
-  fetchBatchCreate({
-    model: EnterStockDetail,
-    data: data
-  })
-}
+// const setProducts = (data, res) => {
+//   return fetchBatchCreate({
+//     model: EnterStockDetail,
+//     data: data
+//   })
+//   .then(resData => {
+//     if (resData.code === 0) {
+//       return resData
+//     } else {
+//       res.send(resData)
+//     }
+//   })
+// }
+
+// const setBaseData = (data, res) => {
+//   fetchCreate({
+//     model: EnterStock,
+//     data: data
+//   })
+//   .then(resMsg => {
+//     res.send(resMsg)
+//   })
+// }
+
 
 module.exports = router
-
