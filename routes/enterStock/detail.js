@@ -1,10 +1,7 @@
 import express from 'express'
-// import EnterStock from '../../Model/enterStock'
-// import EnterStockDetail from '../../Model/enterStockDetail'
 
-// import { codeCreate } from '../../Controller/enterStore'
+// 业务处理
 import { enterStoreCreate } from '../../Controller/enterStore'
-// import { fetchCreate, fetchBatchCreate } from '../../utils/api'
 
 const router = express.Router()
 
@@ -37,52 +34,11 @@ router.route('/')
         remark: '这个是单个的商品价格3'
       }]
     }
-    // todo
     enterStoreCreate(test)
     .then((data) => {
+      console.log('出来吧：', data)
       res.send(data)
     })
-    // codeCreate()
-    // .then((code) => {
-    //   let { base, data } = test
-    //   base.code = code
-    //   data.map(item => {
-    //     item.code = code
-    //     return item
-    //   })
-    //   return test
-    // })
-    // .then((test) => {
-    //   setProducts(test.data, res)
-    //   .then(() => {
-    //     setBaseData(test.base, res)
-    //   })
-    // })
   })
-
-// const setProducts = (data, res) => {
-//   return fetchBatchCreate({
-//     model: EnterStockDetail,
-//     data: data
-//   })
-//   .then(resData => {
-//     if (resData.code === 0) {
-//       return resData
-//     } else {
-//       res.send(resData)
-//     }
-//   })
-// }
-
-// const setBaseData = (data, res) => {
-//   fetchCreate({
-//     model: EnterStock,
-//     data: data
-//   })
-//   .then(resMsg => {
-//     res.send(resMsg)
-//   })
-// }
-
 
 module.exports = router

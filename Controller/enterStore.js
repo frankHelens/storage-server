@@ -18,10 +18,10 @@ export const enterStoreCreate = (data) => {
     return data
   })
   .then((data) => {
-    setProducts(data.tableData)
+    return setProducts(data.tableData)
     .then((productData) => {
       if (productData) {
-        setBaseData(data.base)
+        return setBaseData(data.base)
         .then((baseData) => {
           if (baseData) {
             return baseData
@@ -59,7 +59,7 @@ const setProducts = (data) => {
 
 // 添加订单基础信息到数据库
 const setBaseData = (data) => {
-  fetchCreate({
+  return fetchCreate({
     model: EnterStock,
     data: data
   })
