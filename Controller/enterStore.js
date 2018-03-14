@@ -76,7 +76,8 @@ const setBaseData = (data) => {
   })
 }
 
-export const getEnterStoreDetail = (id) => { // 获取入仓单数据
+// 获取入仓单数据
+export const getEnterStoreDetail = (id) => {
   let resData = {}
   return getEnterStore(id)
   .then((data) => {
@@ -93,7 +94,8 @@ export const getEnterStoreDetail = (id) => { // 获取入仓单数据
   })
 }
 
-const getEnterStore = (id) => { // 查询入仓单
+// 查询入仓单
+const getEnterStore = (id) => {
   return fetch({
     model: EnterStock,
     data: {
@@ -107,7 +109,8 @@ const getEnterStore = (id) => { // 查询入仓单
   })
 }
 
-const getEnterStoreDetailList = (code) => { // 查询入仓单列表
+// 查询入仓单列表
+const getEnterStoreDetailList = (code) => {
   return fetch({
     model: EnterStockDetail,
     data: {
