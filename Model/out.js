@@ -48,6 +48,6 @@ const Out = schema.define('product_out', {
 //   timestamps: false
 });
 // Out.drop(); //删除表
-Out.sync(); //创建表
+// Out.sync(); //创建表
 
 module.exports = Out;

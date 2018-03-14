@@ -17,10 +17,19 @@ const EnterStockDetail = schema.define('enter_stock_detail', {
       isNumeric: true
     }
   },
+  enterStockId: {
+    type: Sequelize.INTEGER
+  },
   enterNum: {
     type: Sequelize.INTEGER,
     validate: {
       isNumeric: true
+    }
+  },
+  productPrice: {
+    type: Sequelize.FLOAT(3),
+    validate: {
+      isNumeric: true // 只能使用数字
     }
   },
   discount: {
@@ -34,6 +43,7 @@ const EnterStockDetail = schema.define('enter_stock_detail', {
   }
 });
 
+// EnterStockDetail.drop();
 // EnterStockDetail.sync(); //创建表
 
 module.exports = EnterStockDetail;
