@@ -129,8 +129,9 @@ export const fetchRelation = (props) => {
   })
 }
 
-export const fetch = (props) => {
-  const { model } = props
-  return model.findAll()
+export const fetch = (props) => { // 自定义查询方法
+  const { model, data } = props
+  return model.findAll({
+    where: data
+  })
 }
-
