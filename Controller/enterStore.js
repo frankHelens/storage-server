@@ -1,6 +1,6 @@
 import moment from 'moment'
 import { EnterStock, EnterStockDetail, Product } from '../Model'
-import { fetchList, fetchCreate, fetchBatchCreate, fetch } from '../utils/api'
+import { fetchList, fetchCreate, fetchBatchCreate, fetch, fetchUpdate } from '../utils/api'
 import { Message } from '../utils/common'
 // import { cloneDeep, omit } from 'lodash'
 
@@ -11,7 +11,6 @@ export const enterStockCreate = (data) => {
     let { base, tableData } = data
     base.code = code
     tableData.map(item => {
-      item.code = code
       item.enterStockId = Number(enterStockId)
       return item
     })
@@ -73,6 +72,7 @@ const createBaseData = (data) => {
   })
 }
 
+
 // 获取入仓单数据
 export const getEnterStockDetail = (id) => {
   let resData = {}
@@ -97,6 +97,7 @@ export const getEnterStockDetail = (id) => {
     }
   })
 }
+
 // 更新数据
 export const putEnterStockDetail = ({ id, data }) => {
   const { base, tableData } = data
@@ -137,5 +138,21 @@ const deleteEnterStockDetail = (ids, data) => {
   })
   .catch(err => {
     Message(-1, null, '更新数据失败！')
+  })
+}
+
+// 更新
+const updateEnterStock = ({ id, data }) => {
+  return fetchUpdate({
+    model: EnterStock,
+    id,
+    data
+  })
+  .then(res => {
+    if (res.code === 0) {
+      return res     
+    } else {
+      return Message(500, {}, null)
+    }
   })
 }

@@ -8,9 +8,6 @@ const EnterStockDetail = schema.define('enter_stock_detail', {
     primaryKey: true,
     autoIncrement:true
   },
-  code: { // 编号
-    type: Sequelize.STRING(255)
-  },
   productId: {
     type: Sequelize.INTEGER,
     references: {
@@ -48,6 +45,6 @@ const EnterStockDetail = schema.define('enter_stock_detail', {
 });
 
 // EnterStockDetail.drop();
-EnterStockDetail.sync();
+// EnterStockDetail.sync();
 
 module.exports = EnterStockDetail;
