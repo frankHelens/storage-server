@@ -1,30 +1,27 @@
 import moment from 'moment'
-
-import EnterStock from '../Model/enterStock'
-import EnterStockDetail from '../Model/enterStockDetail'
-
+import { EnterStock, EnterStockDetail, Product } from '../Model'
 import { fetchList, fetchCreate, fetchBatchCreate, fetch } from '../utils/api'
-
 import { Message } from '../utils/common'
+// import { cloneDeep, omit } from 'lodash'
 
 // 事务处理
-export const enterStoreCreate = (data) => {
+export const enterStockCreate = (data) => {
   return codeCreate()
   .then(({enterStockId, code}) => {
     let { base, tableData } = data
     base.code = code
     tableData.map(item => {
       item.code = code
-      item.enterStockId = enterStockId
+      item.enterStockId = Number(enterStockId)
       return item
     })
     return data
   })
   .then((data) => {
-    return setProducts(data.tableData)
+    return createEnterStockDetail(data.tableData)
     .then((productData) => {
       if (productData) {
-        return setBaseData(data.base)
+        return createBaseData(data.base)
         .then((baseData) => {
           if (baseData) {
             return baseData
@@ -51,7 +48,7 @@ export const codeCreate = () => {
 }
 
 // 添加入库的信息到数据库
-const setProducts = (data) => {
+const createEnterStockDetail = (data) => {
   return fetchBatchCreate({
     model: EnterStockDetail,
     data: data
@@ -64,7 +61,7 @@ const setProducts = (data) => {
 }
 
 // 添加订单基础信息到数据库
-const setBaseData = (data) => {
+const createBaseData = (data) => {
   return fetchCreate({
     model: EnterStock,
     data: data
@@ -77,47 +74,68 @@ const setBaseData = (data) => {
 }
 
 // 获取入仓单数据
-export const getEnterStoreDetail = (id) => {
+export const getEnterStockDetail = (id) => {
   let resData = {}
-  return getEnterStore(id)
-  .then((data) => {
-    if (data) {
-      resData.base = data
-      return getEnterStoreDetailList(data.code)
-      .then(detailData => {
-        resData.tableData = detailData
-        return Message(0, resData, '成功')
-      })
-    } else {
-      return Message(400, null, '找不到对应资源')
-    }
-  })
-}
-
-// 查询入仓单
-const getEnterStore = (id) => {
-  return fetch({
-    model: EnterStock,
-    data: {
+  return EnterStock.findAll({
+    include: {
+      model: EnterStockDetail,
+      include: [Product]
+    },
+    where: {
       id
     }
   })
-  .then(data => {
-    if (data.length) {
-      return data[0]
+  .then((data) => {
+    if (data && data.length) {
+      resData = {
+        base: data[0],
+        tableData: data.filter(item => item.enter_stock_detail).map(item => item.enter_stock_detail)
+      }
+      return Message(0, resData, '成功')
+    } else {
+      return Message(404, null, '找不到对应资源')
+    }
+  })
+}
+// 更新数据
+export const putEnterStockDetail = ({ id, data }) => {
+  const { base, tableData } = data
+  const postData = tableData.map(item => {
+    item.enterStockId = id
+    return item
+  })
+  return EnterStock.findAll({
+    include: {
+      model: EnterStockDetail
+    },
+    where: {
+      id
+    }
+  })
+  .then((resData) => {
+    // 判断是否为空数据
+    const checkData = resData.filter(item => item.enter_stock_detail)
+    if (checkData.length) {
+      const ids = checkData.map(item => item.enter_stock_detail.id)
+      return deleteEnterStockDetail(ids, postData)
+    } else {
+      return createEnterStockDetail(postData)
     }
   })
 }
 
-// 查询入仓单列表
-const getEnterStoreDetailList = (code) => {
-  return fetch({
-    model: EnterStockDetail,
-    data: {
-      code
+// 删除全部数据
+const deleteEnterStockDetail = (ids, data) => {
+  return EnterStockDetail.destroy({
+    where: {
+      id: ids
     }
   })
-  .then(data => {
-    return data
+  .then(() => {
+    // 更新数据
+    return createEnterStockDetail(data)
+  })
+  .catch(err => {
+    Message(-1, null, '更新数据失败！')
   })
 }

@@ -131,7 +131,5 @@ export const fetchRelation = (props) => {
 
 export const fetch = (props) => { // 自定义查询方法
   const { model, data } = props
-  return model.findAll({
-    where: data
-  })
+  return model.findAll(data)
 }

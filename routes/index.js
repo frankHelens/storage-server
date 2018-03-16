@@ -4,8 +4,9 @@ import express from 'express'
 import product from './product'
 import relation from './relation'
 import enterStock from './enterStock'
+import test from './test'
 
-const router = express.Router();
+export const router = express.Router();
 
 router.route('/')
   .get(function(req, res) {
@@ -14,8 +15,8 @@ router.route('/')
 // router.use('/login', login)
 
 router.use('/relation', relation)
-
 router.use('/product', product)
 router.use('/enterStock', enterStock)
+router.use('/test', test)
   
 module.exports = router;

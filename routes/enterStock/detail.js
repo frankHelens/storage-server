@@ -1,13 +1,13 @@
 import express from 'express'
 
 // 业务处理
-import { enterStoreCreate, getEnterStoreDetail } from '../../Controller/enterStore'
+import { enterStockCreate, getEnterStockDetail, putEnterStockDetail } from '../../Controller/enterStore'
 
 const router = express.Router()
 
 router.route('/')
   .post((req, res) => {
-    enterStoreCreate(req.body)
+    enterStockCreate(req.body)
     .then((data) => {
       res.send(data)
     })
@@ -15,7 +15,16 @@ router.route('/')
 
 router.route('/:id')
   .get((req, res) => {
-    getEnterStoreDetail(req.params.id)
+    getEnterStockDetail(req.params.id)
+    .then((data) => {
+      res.send(data)
+    })
+  })
+  .put((req, res) => {
+    putEnterStockDetail({
+      id: req.params.id,
+      data: req.body
+    })
     .then((data) => {
       res.send(data)
     })

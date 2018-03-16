@@ -1,9 +1,6 @@
 import express from 'express'
-
-import EnterStock from '../../Model/enterStock'
-
+import { EnterStock } from '../../Model'
 import detail from './detail'
-
 import { fetchList } from '../../utils/api'
 
 const router = express.Router();

@@ -13,6 +13,10 @@ const EnterStockDetail = schema.define('enter_stock_detail', {
   },
   productId: {
     type: Sequelize.INTEGER,
+    references: {
+      model: 'products',
+      key: 'id'
+    },
     validate: {
       isNumeric: true
     }
@@ -44,6 +48,6 @@ const EnterStockDetail = schema.define('enter_stock_detail', {
 });
 
 // EnterStockDetail.drop();
-// EnterStockDetail.sync(); //创建表
+EnterStockDetail.sync();
 
 module.exports = EnterStockDetail;
