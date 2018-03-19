@@ -4,6 +4,7 @@ import express from 'express'
 import product from './product'
 import relation from './relation'
 import enterStock from './enterStock'
+import deliveryStock from './deliveryStock'
 import test from './test'
 
 export const router = express.Router();
@@ -17,6 +18,7 @@ router.route('/')
 router.use('/relation', relation)
 router.use('/product', product)
 router.use('/enterStock', enterStock)
+router.use('/deliveryStock', deliveryStock)
 router.use('/test', test)
   
 module.exports = router;

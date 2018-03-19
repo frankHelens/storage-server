@@ -35,6 +35,6 @@ const EnterStock = schema.define('enter_stock', {
 });
 
 // EnterStock.drop();
-EnterStock.sync();
+// EnterStock.sync();
 
 module.exports = EnterStock;
