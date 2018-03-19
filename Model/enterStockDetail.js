@@ -8,7 +8,7 @@ const EnterStockDetail = schema.define('enter_stock_detail', {
     primaryKey: true,
     autoIncrement:true
   },
-  productId: {
+  productId: { // 商品id
     type: Sequelize.INTEGER,
     references: {
       model: 'products',
@@ -18,28 +18,34 @@ const EnterStockDetail = schema.define('enter_stock_detail', {
       isNumeric: true
     }
   },
-  enterStockId: {
+  enterStockId: { // 入库单Id
     type: Sequelize.INTEGER
   },
-  enterNum: {
+  enterNum: { // 入库数量
     type: Sequelize.INTEGER,
     validate: {
       isNumeric: true
     }
   },
-  productPrice: {
+  productPrice: { // 入库金额
     type: Sequelize.FLOAT(3),
     validate: {
       isNumeric: true // 只能使用数字
     }
   },
-  discount: {
+  unitPrice: { // 单价
+    type: Sequelize.FLOAT(3),
+    validate: {
+      isNumeric: true // 只能使用数字
+    }
+  },
+  discount: { // 折扣率
     type: Sequelize.Sequelize.FLOAT(3),
     validate: {
       isNumeric: true
     }
   },
-  remark: {
+  remark: { // 备注
     type: Sequelize.STRING(255)
   }
 });
