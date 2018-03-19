@@ -1,7 +1,7 @@
 import express from 'express'
 
 // 业务处理
-import { deliveryStockCreate, getDeliveryStockDetail, putDeliveryStockDetail } from '../../Controller/enterStore'
+import { deliveryStockCreate, getDeliveryStockDetail, putDeliveryStockDetail } from '../../Controller/deliveryStore'
 
 const router = express.Router()
 
