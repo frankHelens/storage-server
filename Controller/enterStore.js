@@ -3,6 +3,7 @@ import { EnterStock, EnterStockDetail, Product } from '../Model'
 import { fetchList, fetchCreate, fetchBatchCreate, fetch, fetchUpdate } from '../utils/api'
 import { Message } from '../utils/common'
 // import { cloneDeep, omit } from 'lodash'
+import sequelize from '../DB/config'
 
 // 事务处理
 export const enterStockCreate = (data) => {
@@ -54,7 +55,7 @@ const createEnterStockDetail = (data) => {
   })
   .then(resData => {
     if (resData.code === 0) {
-      return resData
+      return updateProducts(data)
     }
   })
 }
@@ -69,6 +70,30 @@ const createBaseData = (data) => {
     if (resMsg.code === 0) {
       return resMsg
     }
+  })
+}
+
+// 更新商品列表
+const updateProducts = (data) => {
+  // console.log(data)
+  return sequelize.transaction((t) => {
+    return data.map(item => {
+      const { productId, enterNum, unitPrice } = item
+      return Product.update({
+        productNum: enterNum, // 修改入库数量
+        newPrice: unitPrice
+      }, {
+        where: {
+          id: productId
+        }
+      }, {transaction: t})
+    })
+  })
+  .then((result) => {
+    return Message(0, result, '修改成功！')
+  })
+  .catch((error) => {
+    return Message(-1, error, '错误！')
   })
 }
 
@@ -118,10 +143,25 @@ export const putEnterStockDetail = ({ id, data }) => {
     const checkData = resData.filter(item => item.enter_stock_detail)
     if (checkData.length) {
       const ids = checkData.map(item => item.enter_stock_detail.id)
-      return deleteEnterStockDetail(ids, postData)
+      return deleteEnterStockDetail(ids, postData).then(res => {
+        if (res) {
+          return updateEnterStock({ base, id })
+        } else {
+          throw Message(-1, null, '更新失败！')
+        }
+      })
     } else {
-      return createEnterStockDetail(postData)
+      return createEnterStockDetail(postData).then(res => {
+        if (res) {
+          return updateEnterStock({ base, id })
+        } else {
+          throw Message(-1, null, '更新失败！')
+        }
+      })
     }
+  })
+  .catch((error) => {
+    return error
   })
 }
 
@@ -142,11 +182,12 @@ const deleteEnterStockDetail = (ids, data) => {
 }
 
 // 更新
-const updateEnterStock = ({ id, data }) => {
+const updateEnterStock = ({ id, base }) => {
+  console.log(id, base)
   return fetchUpdate({
     model: EnterStock,
     id,
-    data
+    data: base
   })
   .then(res => {
     if (res.code === 0) {
