@@ -1,24 +1,24 @@
 import moment from 'moment'
-import { EnterStock, EnterStockDetail, Product } from '../Model'
+import { DeliveryStock, DeliveryStockDetail, Product } from '../Model'
 import { fetchList, fetchCreate, fetchBatchCreate, fetch, fetchUpdate } from '../utils/api'
 import { Message } from '../utils/common'
 // import { cloneDeep, omit } from 'lodash'
 import sequelize from '../DB/config'
 
 // 事务处理
-export const enterStockCreate = (data) => {
+export const deliveryStockCreate = (data) => {
   return codeCreate()
-  .then(({enterStockId, code}) => {
+  .then(({deliveryStockId, code}) => {
     let { base, tableData } = data
     base.code = code
     tableData.map(item => {
-      item.enterStockId = Number(enterStockId)
+      item.deliveryStockId = Number(deliveryStockId)
       return item
     })
     return data
   })
   .then((data) => {
-    return createEnterStockDetail(data.tableData)
+    return createDeliveryStockDetail(data.tableData)
     .then((productData) => {
       if (productData) {
         return createBaseData(data.base)
@@ -35,22 +35,22 @@ export const enterStockCreate = (data) => {
 // 生成单据编号跟入库列表的id
 export const codeCreate = () => {
   return fetchList({
-    model: EnterStock,
+    model: DeliveryStock,
     data: {}
   })
   .then((res) => {
     const count = res.data.recordsTotal + 1
     return {
-      enterStockId: count,
-      code: 'JHD' + Number(moment().format('YYYYMMDD')) * 1000 + count
+      deliveryStockId: count,
+      code: 'CHD' + Number(moment().format('YYYYMMDD')) * 1000 + count
     }
   })
 }
 
 // 添加入库的信息到数据库
-const createEnterStockDetail = (data) => {
+const createDeliveryStockDetail = (data) => {
   return fetchBatchCreate({
-    model: EnterStockDetail,
+    model: DeliveryStockDetail,
     data: data
   })
   .then(resData => {
@@ -63,7 +63,7 @@ const createEnterStockDetail = (data) => {
 // 添加订单基础信息到数据库
 const createBaseData = (data) => {
   return fetchCreate({
-    model: EnterStock,
+    model: DeliveryStock,
     data: data
   })
   .then(resMsg => {
@@ -78,9 +78,9 @@ const updateProducts = (data) => {
   // console.log(data)
   return sequelize.transaction((t) => {
     return data.map(item => {
-      const { productId, enterNum, unitPrice } = item
+      const { productId, deliveryNum, unitPrice } = item
       return Product.update({
-        productNum: enterNum, // 修改入库数量
+        productNum: deliveryNum, // 修改入库数量
         newPrice: unitPrice
       }, {
         where: {
@@ -99,11 +99,11 @@ const updateProducts = (data) => {
 
 
 // 获取入仓单数据
-export const getEnterStockDetail = (id) => {
+export const getDeliveryStockDetail = (id) => {
   let resData = {}
-  return EnterStock.findAll({
+  return DeliveryStock.findAll({
     include: {
-      model: EnterStockDetail,
+      model: DeliveryStockDetail,
       include: [Product]
     },
     where: {
@@ -114,7 +114,7 @@ export const getEnterStockDetail = (id) => {
     if (data && data.length) {
       resData = {
         base: data[0],
-        tableData: data.filter(item => item.enter_stock_detail).map(item => item.enter_stock_detail)
+        tableData: data.filter(item => item.delivery_stock_detail).map(item => item.delivery_stock_detail)
       }
       return Message(0, resData, '成功')
     } else {
@@ -124,15 +124,15 @@ export const getEnterStockDetail = (id) => {
 }
 
 // 更新数据
-export const putEnterStockDetail = ({ id, data }) => {
+export const putDeliveryStockDetail = ({ id, data }) => {
   const { base, tableData } = data
   const postData = tableData.map(item => {
-    item.enterStockId = id
+    item.deliveryStockId = id
     return item
   })
-  return EnterStock.findAll({
+  return DeliveryStock.findAll({
     include: {
-      model: EnterStockDetail
+      model: DeliveryStockDetail
     },
     where: {
       id
@@ -140,20 +140,20 @@ export const putEnterStockDetail = ({ id, data }) => {
   })
   .then((resData) => {
     // 判断是否为空数据
-    const checkData = resData.filter(item => item.enter_stock_detail)
+    const checkData = resData.filter(item => item.delivery_stock_detail)
     if (checkData.length) {
-      const ids = checkData.map(item => item.enter_stock_detail.id)
-      return deleteEnterStockDetail(ids, postData).then(res => {
+      const ids = checkData.map(item => item.delivery_stock_detail.id)
+      return deleteDeliveryStockDetail(ids, postData).then(res => {
         if (res) {
-          return updateEnterStock({ base, id })
+          return updateDeliveryStock({ base, id })
         } else {
           throw Message(-1, null, '更新失败！')
         }
       })
     } else {
-      return createEnterStockDetail(postData).then(res => {
+      return createDeliveryStockDetail(postData).then(res => {
         if (res) {
-          return updateEnterStock({ base, id })
+          return updateDeliveryStock({ base, id })
         } else {
           throw Message(-1, null, '更新失败！')
         }
@@ -166,15 +166,15 @@ export const putEnterStockDetail = ({ id, data }) => {
 }
 
 // 删除全部数据
-const deleteEnterStockDetail = (ids, data) => {
-  return EnterStockDetail.destroy({
+const deleteDeliveryStockDetail = (ids, data) => {
+  return DeliveryStockDetail.destroy({
     where: {
       id: ids
     }
   })
   .then(() => {
     // 更新数据
-    return createEnterStockDetail(data)
+    return createDeliveryStockDetail(data)
   })
   .catch(err => {
     Message(-1, null, '更新数据失败！')
@@ -182,9 +182,9 @@ const deleteEnterStockDetail = (ids, data) => {
 }
 
 // 更新
-const updateEnterStock = ({ id, base }) => {
+const updateDeliveryStock = ({ id, base }) => {
   return fetchUpdate({
-    model: EnterStock,
+    model: DeliveryStock,
     id,
     data: base
   })
