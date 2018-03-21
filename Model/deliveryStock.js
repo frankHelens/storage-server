@@ -11,7 +11,7 @@ const DeliveryStock = schema.define('delivery_stock', {
   code: {
     type: Sequelize.STRING(255)
   },
-  origin: {
+  clientName: {
     type: Sequelize.STRING(255)
   },
   storageType: {
@@ -23,10 +23,16 @@ const DeliveryStock = schema.define('delivery_stock', {
       isNumeric: true // 只能使用数字
     }
   },
-  takePe: {
+  clientAddress: { // 发货地址
     type: Sequelize.STRING(255)
   },
-  makePe: {
+  linkMan: { // 联系人
+    type: Sequelize.STRING(50)
+  },
+  linkPhone: { // 电话
+    type: Sequelize.STRING(32)
+  },
+  makePe: { // 制单人
     type: Sequelize.STRING(255)
   },
   remark: {
@@ -34,7 +40,7 @@ const DeliveryStock = schema.define('delivery_stock', {
   }
 });
 
-// EnterStock.drop();
-// DeliveryStock.sync();
+// DeliveryStock.drop();
+DeliveryStock.sync();
 
 module.exports = DeliveryStock;
