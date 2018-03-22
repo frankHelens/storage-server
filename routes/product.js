@@ -2,7 +2,8 @@ import express from 'express'
 //引入数据库Product模块
 import { Product } from '../Model'
 // 引入处理数据的api
-import { fetchList, fetchCreate, fetchUpdate, fetchDelete, fetchBatchDelete } from '../utils/api'
+import { fetchList, fetchCreate, fetchUpdate, fetchDelete, fetchBatchDelete, fetch } from '../utils/api'
+import sequelize from '../DB/config'
 
 const router = express.Router();
 
@@ -17,9 +18,6 @@ router.route('/')
     })
   })
   .post((req, res) => {
-    // console.log(Object.assign(req.body, {
-    //   totalNum: Number(req.body.storeNum) + Number(req.body.productNum)
-    // }))
     fetchCreate({
       model: Product,
       data: req.body
@@ -56,6 +54,17 @@ router.route('/:id')
     })
     .then((data) => {
       res.send(data)
+    })
+  })
+
+router.route('/safe')
+  .get((req, res) => {
+    sequelize.query('SELECT * FROM products WHERE productNum < safeNum', { model: Product }).then(function (product) {
+      res.send({
+        code: 0,
+        data: product,
+        message: ''
+      })
     })
   })
 module.exports = router;

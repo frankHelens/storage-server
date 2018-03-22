@@ -20,5 +20,5 @@ router.use('/product', product)
 router.use('/enterStock', enterStock)
 router.use('/deliveryStock', deliveryStock)
 router.use('/test', test)
-  
+
 module.exports = router;
