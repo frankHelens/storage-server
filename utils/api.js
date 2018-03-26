@@ -91,7 +91,7 @@ export const fetchBatchDelete = (props) => {
     }
   })
   .then((res) => {
-    return Message(0, res.id, '批量删除成功！')
+    return Message(0, res.id, '删除成功！')
   })
   .catch((err) => {
     console.log('err：', err)
