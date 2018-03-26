@@ -5,6 +5,9 @@ import logger from 'morgan'
 import cookieParser from 'cookie-parser'
 import bodyParser from 'body-parser'
 import index from './routes/index' // 路由引入
+import login from './routes/login'
+import test from './routes/test'
+import { decodeToken } from './utils/common'
 
 import { resInfo } from './utils/infoRender'
 
@@ -27,10 +30,27 @@ app.use(function(request, response, next) {
     next();
 });
 
+app.use('/login', login);
+app.use('/test', test)
+app.use('/*', function (req, res, next) {
+  // 获取token
+  const token = req.headers['frank-access-token']
+  const { code, data } = decodeToken(token)
+  if (req.url === '/login') {
+    next();
+  } else if (code === -1) {
+    res.send({
+      code: 401,
+      data: {},
+      message: '访问超时，请重新登录！'
+    })
+  } else {
+    req.decode = data
+    next();
+  }
+})
 // 路由
 app.use('/', index);
-// app.use('/users', users);
-// app.use('/upload', upload);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
