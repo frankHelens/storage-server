@@ -33,6 +33,8 @@
 //   }
 // }
 
+import jwt from 'jsonwebtoken'
+
 export const Message = (code, data, message) => {
   const errorInfo = '未知异常，请联系管理员！'
   if (code === 500) {
@@ -129,4 +131,24 @@ export const groupFormat = (arr, id) => {
     }
   }
   return dest
+}
+
+export const signToken = (data) => {
+  const key = 'frank123'
+  return jwt.sign(data, key, {
+    expiresIn: 60 * 60 * 24  // 24小时过期
+    // expiresIn: 10
+  })
+}
+
+export const decodeToken = (token) => {
+  const key = 'frank123'
+  return jwt.verify(token, key, (err, decode) => {
+    if (err) {
+      console.log(err)
+      return Message(-1, err, '无效的token')
+    } else {
+      return Message(0, decode, '')
+    }
+  })
 }
