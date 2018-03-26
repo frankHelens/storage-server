@@ -62,7 +62,11 @@ router.route('/safe')
     sequelize.query('SELECT * FROM products WHERE productNum < safeNum', { model: Product }).then(function (product) {
       res.send({
         code: 0,
-        data: product,
+        data: {
+          data: product,
+          recordsFiltered: product.length,
+          recordsTotal: product.length
+        },
         message: ''
       })
     })
