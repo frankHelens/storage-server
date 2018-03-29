@@ -3,6 +3,7 @@ import express from 'express'
 import { Menu } from '../Model'
 // 引入处理数据的api
 import { fetchList, fetchCreate, fetchUpdate, fetchBatchDelete } from '../utils/api'
+import { menuRelation } from '../Controller/menu'
 
 const router = express.Router();
 
@@ -47,4 +48,12 @@ router.route('/:id')
     })
   })
 
+
+router.route('/relation')
+  .get((req, res) => {
+    menuRelation(req.query)
+    .then(data => {
+      res.send(data)
+    })
+  })
 module.exports = router;
