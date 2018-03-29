@@ -47,14 +47,14 @@ router.route('/')
       url: '/manage/enterStockDetail',
       icon: '',
       type: 'PAGE',
-      noMenu: true
+      noMenu: '1'
     }, {
       label: '入库单',
       parentId: 5,
       url: '/manage/enterStockDetail/:id',
       icon: '',
       type: 'PAGE',
-      noMenu: true
+      noMenu: '1'
     }, {
       label: '出库管理',
       parentId: 4,
@@ -67,28 +67,28 @@ router.route('/')
       url: '/manage/deliveryStockDetail',
       icon: '',
       type: 'PAGE',
-      noMenu: true
+      noMenu: '1'
     }, {
       label: '出库单',
       parentId: 8,
       url: '/manage/deliveryStockDetail/:id',
       icon: '',
       type: 'PAGE',
-      noMenu: true
+      noMenu: '1'
     }, {
       parentId: 0,
       label: '修改密码',
       url: '/system/changePassword',
       icon: '',
       type: 'PAGE',
-      noMenu: true
+      noMenu: '1'
     }, {
       parentId: 2,
       label: '安全库存列表',
       url: '/base/safeList',
       icon: 'document-text',
       type: 'PAGE',
-      noMenu: true
+      noMenu: '1'
     }])
     .then(data => {
       res.send(data)
