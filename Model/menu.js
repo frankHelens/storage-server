@@ -24,17 +24,20 @@ const Menu = schema.define('ac_menu', {
     type: Sequelize.STRING(24)
   },
   noMenu: {
-    type: Sequelize.BOOLEAN,
-    allowNull: false,
-    defaultValue: true
+    type: Sequelize.STRING(1),
+    // type: Sequelize.BOOLEAN,
+    // allowNull: false,
+    defaultValue: '0'
   },
   remark: {
     type: Sequelize.STRING(255)
   },
   enabled: {
-    type: Sequelize.BOOLEAN,
-    allowNull: false,
-    defaultValue: true
+    type: Sequelize.STRING(1),
+    defaultValue: '1'
+    // type: Sequelize.BOOLEAN,
+    // allowNull: false,
+    // defaultValue: true
   }
 });
 // Menu.drop(); //删除表
