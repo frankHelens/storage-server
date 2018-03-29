@@ -190,7 +190,7 @@ const updateDeliveryStock = ({ id, base }) => {
   })
   .then(res => {
     if (res.code === 0) {
-      return res     
+      return Message(0, Number(id), '更新成功！')
     } else {
       return Message(500, {}, null)
     }

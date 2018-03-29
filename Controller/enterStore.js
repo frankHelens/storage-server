@@ -141,7 +141,7 @@ export const putEnterStockDetail = ({ id, data }) => {
   .then((resData) => {
     // 判断是否为空数据
     const checkData = resData.filter(item => item.enter_stock_detail)
-    if (checkData.length) {
+    if (checkData.length) { // 若有更新数据则删除所以原来的数据， 再更新
       const ids = checkData.map(item => item.enter_stock_detail.id)
       return deleteEnterStockDetail(ids, postData).then(res => {
         if (res) {
@@ -150,7 +150,7 @@ export const putEnterStockDetail = ({ id, data }) => {
           throw Message(-1, null, '更新失败！')
         }
       })
-    } else {
+    } else { // 否则直接添加新的数据
       return createEnterStockDetail(postData).then(res => {
         if (res) {
           return updateEnterStock({ base, id })
@@ -190,7 +190,7 @@ const updateEnterStock = ({ id, base }) => {
   })
   .then(res => {
     if (res.code === 0) {
-      return res     
+      return Message(0, Number(id), '更新成功！')
     } else {
       return Message(500, {}, null)
     }
