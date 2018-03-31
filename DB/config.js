@@ -18,7 +18,7 @@ logSql: 控制台输出sql（默认: false）
 const config = {
   host: 'localhost',
   user: 'root',
-  password: '',
+  password: 'frank123',
   database:'storage',
   port: 3306
 }
