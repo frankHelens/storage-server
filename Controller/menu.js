@@ -2,7 +2,6 @@ import { Menu, Dictionaries } from '../Model'
 import { fetchRelation } from '../utils/api'
 
 export const menuRelation = (data) => {
-  console.log(data)
   const { menuId } = data.relationList
   return fetchRelation({
     model: Dictionaries,
@@ -24,4 +23,3 @@ export const menuRelation = (data) => {
     })
   })
 }
-

@@ -47,14 +47,4 @@ router.route('/:id')
     })
   })
 
-router.route('/get')
-  .get((req, res) => {
-    const { userId, loginName } = req.decode
-    res.send({
-      code: 0,
-      data: req.decode,
-      message: ''
-    })
-  })
-
 module.exports = router;

@@ -22,7 +22,7 @@ export const loginCheck = ({body}) => {
           const userMessage = {
             userId: id,
             loginName,
-            realname: name,
+            realName: name,
             loginPassword
           }
           return Message(0, {

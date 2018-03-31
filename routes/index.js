@@ -8,6 +8,7 @@ import users from './users'
 import test from './test'
 import changePassword from './changePassword'
 import menu from './menu'
+import rbac from './rbac'
 
 export const router = express.Router();
 
@@ -24,5 +25,6 @@ router.use('/user', users)
 router.use('/changePassword', changePassword)
 router.use('/menu', menu)
 router.use('/test', test)
+router.use('/rbac', rbac)
 
 module.exports = router;
