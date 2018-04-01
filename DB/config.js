@@ -24,7 +24,7 @@ const config = {
 }
 
  // 数据库初始化建立
-const sequelize = new Sequelize(config.database, config.username, null, {
+const sequelize = new Sequelize(config.database, config.user, config.password, {
   host: config.host,
   dialect: 'mysql',
   pool: {
