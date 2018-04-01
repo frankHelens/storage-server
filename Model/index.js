@@ -4,8 +4,8 @@ import EnterStockDetail from './enterStockDetail'
 import Product from './product'
 import DeliveryStock from './deliveryStock'
 import DeliveryStockDetail from './deliveryStockDetail'
-import User from './User'
-import Menu from './Menu'
+import User from './user'
+import Menu from './menu'
 
 EnterStockDetail.belongsTo(Product)
 EnterStock.hasOne(EnterStockDetail)
