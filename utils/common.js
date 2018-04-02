@@ -141,7 +141,7 @@ export const signToken = (data) => {
   })
 }
 
-export const decodeToken = (token) => {
+export const decodeToken = (token = '') => {
   const key = 'frank123'
   return jwt.verify(token, key, (err, decode) => {
     if (err) {
