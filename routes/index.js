@@ -9,6 +9,8 @@ import test from './test'
 import changePassword from './changePassword'
 import menu from './menu'
 import rbac from './rbac'
+import role from './role'
+import config from './config'
 
 export const router = express.Router();
 
@@ -26,5 +28,7 @@ router.use('/changePassword', changePassword)
 router.use('/menu', menu)
 router.use('/test', test)
 router.use('/rbac', rbac)
+router.use('/role', role)
+router.use('/config', config)
 
 module.exports = router;
