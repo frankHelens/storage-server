@@ -6,6 +6,8 @@ import DeliveryStock from './deliveryStock'
 import DeliveryStockDetail from './deliveryStockDetail'
 import User from './user'
 import Menu from './menu'
+import Role from './role'
+import Config from './config'
 
 EnterStockDetail.belongsTo(Product)
 EnterStock.hasOne(EnterStockDetail)
@@ -20,5 +22,7 @@ module.exports = {
   Product,
   DeliveryStock,
   DeliveryStockDetail,
-  Menu
+  Menu,
+  Role,
+  Config
 }
