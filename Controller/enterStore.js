@@ -79,14 +79,19 @@ const updateProducts = (data) => {
   return sequelize.transaction((t) => {
     return data.map(item => {
       const { productId, enterNum, unitPrice } = item
-      return Product.update({
-        productNum: enterNum, // 修改入库数量
-        newPrice: unitPrice
-      }, {
-        where: {
-          id: productId
-        }
+      return Product.findById(productId).then(product => {
+        return product.increment({
+          productNum: enterNum
+        })
       }, {transaction: t})
+      // return Product.update({
+      //   productNum: enterNum, // 修改入库数量
+      //   newPrice: unitPrice
+      // }, {
+      //   where: {
+      //     id: productId
+      //   }
+      // }, {transaction: t})
     })
   })
   .then((result) => {
