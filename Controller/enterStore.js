@@ -5,6 +5,21 @@ import { Message } from '../utils/common'
 // import { cloneDeep, omit } from 'lodash'
 import sequelize from '../DB/config'
 
+// 生成单据编号跟入库列表的id
+export const codeCreate = () => {
+  return fetchList({
+    model: EnterStock,
+    data: {}
+  })
+  .then((res) => {
+    const count = res.data.recordsTotal + 1
+    return {
+      enterStockId: count,
+      code: 'JHD' + Number(moment().format('YYYYMMDD')) * 1000 + count
+    }
+  })
+}
+
 // 事务处理
 export const enterStockCreate = (data) => {
   return codeCreate()
@@ -29,21 +44,6 @@ export const enterStockCreate = (data) => {
         })
       }
     })
-  })
-}
-
-// 生成单据编号跟入库列表的id
-export const codeCreate = () => {
-  return fetchList({
-    model: EnterStock,
-    data: {}
-  })
-  .then((res) => {
-    const count = res.data.recordsTotal + 1
-    return {
-      enterStockId: count,
-      code: 'JHD' + Number(moment().format('YYYYMMDD')) * 1000 + count
-    }
   })
 }
 
@@ -75,7 +75,6 @@ const createBaseData = (data) => {
 
 // 更新商品列表
 const updateProducts = (data) => {
-  // console.log(data)
   return sequelize.transaction((t) => {
     return data.map(item => {
       const { productId, enterNum, unitPrice } = item
@@ -128,13 +127,28 @@ export const getEnterStockDetail = (id) => {
   })
 }
 
-// 更新数据
+// 更新入库的信息到数据库
+const updateEnterStockDetail = ({postData, dataDetail}) => {
+  return fetchBatchCreate({
+    model: EnterStockDetail,
+    data: postData
+  })
+  .then(resData => {
+    if (resData.code === 0) {
+      // 入库的数据需要相减掉才可以入库
+      const productData = postData.map(item => {
+        const product = dataDetail.find(detailItem => detailItem.productId === item.productId)
+        item.enterNum = product ? (item.enterNum - product.enterNum) : item.enterNum
+        return item
+      })
+      return updateProducts(productData)
+    }
+  })
+}
+
+// 更新入仓单数据
 export const putEnterStockDetail = ({ id, data }) => {
   const { base, tableData } = data
-  const postData = tableData.map(item => {
-    item.enterStockId = id
-    return item
-  })
   return EnterStock.findAll({
     include: {
       model: EnterStockDetail
@@ -144,11 +158,19 @@ export const putEnterStockDetail = ({ id, data }) => {
     }
   })
   .then((resData) => {
-    // 判断是否为空数据
+    // 筛选原有详情的数据
     const checkData = resData.filter(item => item.enter_stock_detail)
+    // 获取原详情数据
+    const dataDetail = checkData.map(item => item.enter_stock_detail)
+    // 设置现详情数据
+    const postData = tableData.map(item => {
+      item.enterStockId = id
+      return item
+    })
+    // 判断是否为空数据
     if (checkData.length) { // 若有更新数据则删除所以原来的数据， 再更新
-      const ids = checkData.map(item => item.enter_stock_detail.id)
-      return deleteEnterStockDetail(ids, postData).then(res => {
+      const ids = dataDetail.map(item => item.id)
+      return deleteEnterStockDetail({ids, postData, dataDetail}).then(res => {
         if (res) {
           return updateEnterStock({ base, id })
         } else {
@@ -156,11 +178,11 @@ export const putEnterStockDetail = ({ id, data }) => {
         }
       })
     } else { // 否则直接添加新的数据
-      return createEnterStockDetail(postData).then(res => {
+      return updateEnterStockDetail({postData, dataDetail}).then(res => {
         if (res) {
           return updateEnterStock({ base, id })
         } else {
-          throw Message(-1, null, '更新失败！')
+          throw Message(-1, null, '更新失败!')
         }
       })
     }
@@ -171,7 +193,7 @@ export const putEnterStockDetail = ({ id, data }) => {
 }
 
 // 删除全部数据
-const deleteEnterStockDetail = (ids, data) => {
+const deleteEnterStockDetail = ({ids, postData, dataDetail}) => {
   return EnterStockDetail.destroy({
     where: {
       id: ids
@@ -179,7 +201,7 @@ const deleteEnterStockDetail = (ids, data) => {
   })
   .then(() => {
     // 更新数据
-    return createEnterStockDetail(data)
+    return updateEnterStockDetail({postData, dataDetail})
   })
   .catch(err => {
     Message(-1, null, '更新数据失败！')
