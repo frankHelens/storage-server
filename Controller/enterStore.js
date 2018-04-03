@@ -2,7 +2,7 @@ import moment from 'moment'
 import { EnterStock, EnterStockDetail, Product } from '../Model'
 import { fetchList, fetchCreate, fetchBatchCreate, fetch, fetchUpdate } from '../utils/api'
 import { Message } from '../utils/common'
-// import { cloneDeep, omit } from 'lodash'
+import { keyBy } from 'lodash'
 import sequelize from '../DB/config'
 
 // 生成单据编号跟入库列表的id
@@ -135,13 +135,22 @@ const updateEnterStockDetail = ({postData, dataDetail}) => {
   })
   .then(resData => {
     if (resData.code === 0) {
-      // 入库的数据需要相减掉才可以入库
+      // 更新商品数据的处理
+      const newDataObj = keyBy(postData, 'productId')
+      const oldDataObj = keyBy(dataDetail, 'productId')
+      // 获取更新商品数量的处理
       const productData = postData.map(item => {
-        const product = dataDetail.find(detailItem => detailItem.productId === item.productId)
+        const product = oldDataObj[item.productId]
         item.enterNum = product ? (item.enterNum - product.enterNum) : item.enterNum
         return item
       })
-      return updateProducts(productData)
+      // 获取去掉一整个商品的内容， 将数量减掉
+      const residueData = dataDetail.filter(filterItem => !newDataObj[filterItem.productId]).map(item => {
+        item.enterNum = 0 - item.enterNum
+        return item
+      })
+      // 最终拼接成一块
+      return updateProducts([...productData, ...residueData])
     }
   })
 }
