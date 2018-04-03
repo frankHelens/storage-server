@@ -83,14 +83,6 @@ const updateProducts = (data) => {
           productNum: enterNum
         })
       }, {transaction: t})
-      // return Product.update({
-      //   productNum: enterNum, // 修改入库数量
-      //   newPrice: unitPrice
-      // }, {
-      //   where: {
-      //     id: productId
-      //   }
-      // }, {transaction: t})
     })
   })
   .then((result) => {

@@ -4,6 +4,7 @@ import { fetchList, fetchCreate, fetchBatchCreate, fetch, fetchUpdate } from '..
 import { Message } from '../utils/common'
 // import { cloneDeep, omit } from 'lodash'
 import sequelize from '../DB/config'
+import { keyBy } from 'lodash'
 
 // 事务处理
 export const deliveryStockCreate = (data) => {
@@ -32,7 +33,7 @@ export const deliveryStockCreate = (data) => {
   })
 }
 
-// 生成单据编号跟入库列表的id
+// 生成单据编号跟出库列表的id
 export const codeCreate = () => {
   return fetchList({
     model: DeliveryStock,
@@ -47,7 +48,7 @@ export const codeCreate = () => {
   })
 }
 
-// 添加入库的信息到数据库
+// 添加出库的信息到数据库
 const createDeliveryStockDetail = (data) => {
   return fetchBatchCreate({
     model: DeliveryStockDetail,
@@ -75,17 +76,18 @@ const createBaseData = (data) => {
 
 // 更新商品列表
 const updateProducts = (data) => {
-  // console.log(data)
   return sequelize.transaction((t) => {
     return data.map(item => {
       const { productId, deliveryNum, unitPrice } = item
-      return Product.update({
-        productNum: deliveryNum, // 修改入库数量
-        newPrice: unitPrice
-      }, {
-        where: {
-          id: productId
-        }
+      return Product.findById(productId).then(product => {
+        return product.decrement({
+          productNum: deliveryNum
+        })
+        .then(() => {
+          product.update({
+            newPrice: unitPrice
+          })
+        })
       }, {transaction: t})
     })
   })
@@ -98,7 +100,7 @@ const updateProducts = (data) => {
 }
 
 
-// 获取入仓单数据
+// 获取出仓单数据
 export const getDeliveryStockDetail = (id) => {
   let resData = {}
   return DeliveryStock.findAll({
@@ -123,13 +125,37 @@ export const getDeliveryStockDetail = (id) => {
   })
 }
 
+// 更新出库的信息到数据库
+const updateDeliveryStockDetail = ({postData, dataDetail}) => {
+  return fetchBatchCreate({
+    model: DeliveryStockDetail,
+    data: postData
+  })
+  .then(resData => {
+    if (resData.code === 0) {
+      // 更新商品数据的处理
+      const newDataObj = keyBy(postData, 'productId')
+      const oldDataObj = keyBy(dataDetail, 'productId')
+      // 获取更新商品数量的处理
+      const productData = postData.map(item => {
+        const product = oldDataObj[item.productId]
+        item.deliveryNum = product ? (item.deliveryNum - product.deliveryNum) : item.deliveryNum
+        return item
+      })
+      // 获取去掉一整个商品的内容， 将数量减掉
+      const residueData = dataDetail.filter(filterItem => !newDataObj[filterItem.productId]).map(item => {
+        item.deliveryNum = 0 - item.deliveryNum
+        return item
+      })
+      // 最终拼接成一块
+      return updateProducts([...productData, ...residueData])
+    }
+  })
+}
+
 // 更新数据
 export const putDeliveryStockDetail = ({ id, data }) => {
   const { base, tableData } = data
-  const postData = tableData.map(item => {
-    item.deliveryStockId = id
-    return item
-  })
   return DeliveryStock.findAll({
     include: {
       model: DeliveryStockDetail
@@ -139,11 +165,19 @@ export const putDeliveryStockDetail = ({ id, data }) => {
     }
   })
   .then((resData) => {
-    // 判断是否为空数据
+    // 筛选原有详情的数据
     const checkData = resData.filter(item => item.delivery_stock_detail)
+    // 获取原详情数据
+    const dataDetail = checkData.map(item => item.delivery_stock_detail)
+    // 设置现详情数据
+    const postData = tableData.map(item => {
+      item.deliveryStockId = id
+      return item
+    })
+    // 判断是否为空数据
     if (checkData.length) {
       const ids = checkData.map(item => item.delivery_stock_detail.id)
-      return deleteDeliveryStockDetail(ids, postData).then(res => {
+      return deleteDeliveryStockDetail({ids, postData, dataDetail}).then(res => {
         if (res) {
           return updateDeliveryStock({ base, id })
         } else {
@@ -151,7 +185,7 @@ export const putDeliveryStockDetail = ({ id, data }) => {
         }
       })
     } else {
-      return createDeliveryStockDetail(postData).then(res => {
+      return updateDeliveryStockDetail({postData, dataDetail}).then(res => {
         if (res) {
           return updateDeliveryStock({ base, id })
         } else {
@@ -166,7 +200,7 @@ export const putDeliveryStockDetail = ({ id, data }) => {
 }
 
 // 删除全部数据
-const deleteDeliveryStockDetail = (ids, data) => {
+const deleteDeliveryStockDetail = ({ids, postData, dataDetail}) => {
   return DeliveryStockDetail.destroy({
     where: {
       id: ids
@@ -174,7 +208,7 @@ const deleteDeliveryStockDetail = (ids, data) => {
   })
   .then(() => {
     // 更新数据
-    return createDeliveryStockDetail(data)
+    return updateDeliveryStockDetail({postData, dataDetail})
   })
   .catch(err => {
     Message(-1, null, '更新数据失败！')
