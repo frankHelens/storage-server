@@ -9,13 +9,14 @@ export const menuRelation = (data) => {
   })
   .then((relation) => {
     return Menu.findAll({
-      attributes: ['id', 'label']
+      attributes: ['id', 'label', 'parentId']
     })
     .then(res => {
       const menuId = res.map(item => {
         return {
           value: item.id,
-          label: item.label
+          label: item.label,
+          parentId: item.parentId || ''
         }
       })
       relation.data['menuId'] = menuId
