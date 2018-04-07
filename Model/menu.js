@@ -41,6 +41,6 @@ const Menu = schema.define('ac_menu', {
   }
 });
 // Menu.drop(); //删除表
-Menu.sync(); //创建表
+// Menu.sync(); //创建表
 
 module.exports = Menu;

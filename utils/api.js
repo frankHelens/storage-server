@@ -11,7 +11,7 @@ import {
 *
 */
 export const fetchList = (props) => {
-  const { model, data } = props
+  const { model, data, include } = props
   const { orderBy, filterBy, pageSize, pageIndex } = data
   const filterByList = getFilterByList(filterBy)
   const orderByList = getOrderByList(orderBy)
@@ -19,7 +19,8 @@ export const fetchList = (props) => {
     order: orderByList,
     where: filterByList,
     offset: pageIndex ? Number(pageIndex - 1) * Number(pageSize) : 0,
-    limit: pageSize ? Number(pageSize) : null
+    limit: pageSize ? Number(pageSize) : null,
+    include
   })
   .then((res) => {
     return Message(0, {

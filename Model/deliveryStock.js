@@ -41,6 +41,6 @@ const DeliveryStock = schema.define('delivery_stock', {
 });
 
 // DeliveryStock.drop();
-DeliveryStock.sync();
+// DeliveryStock.sync();
 
 module.exports = DeliveryStock;

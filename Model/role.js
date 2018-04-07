@@ -14,6 +14,9 @@ const Role = schema.define('ac_role', {
   roleDesc: {
     type: Sequelize.STRING(100)
   },
+  menuIds: {
+    type: Sequelize.STRING(255)
+  },
   enabled: {
     type: Sequelize.STRING(1)
   },
@@ -22,6 +25,6 @@ const Role = schema.define('ac_role', {
   }
 });
 // Role.drop(); //删除表
-Role.sync(); //创建表
+// Role.sync(); //创建表
 
 module.exports = Role;

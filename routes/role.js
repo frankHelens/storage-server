@@ -6,6 +6,13 @@ import { fetchList, fetchCreate, fetchUpdate, fetchBatchDelete } from '../utils/
 
 const router = express.Router();
 
+const joinMenu = (menu) => {
+  return menu.join(',')
+}
+const splitMenu = (menu) => {
+  return menu.split(',')
+}
+
 router.route('/')
   .get((req, res) => {
     fetchList({
@@ -13,10 +20,15 @@ router.route('/')
       data: req.query
     })
     .then((data) => {
+      data.data.data.map(item => {
+        item.menuIds = splitMenu(item.menuIds)
+        return item
+      })
       res.send(data)
     })
   })
   .post((req, res) => {
+    req.body.menuIds = joinMenu(req.body.menuIds)
     fetchCreate({
       model: Role,
       data: req.body
@@ -37,6 +49,7 @@ router.route('/')
 
 router.route('/:id')
   .put((req, res) => {
+    req.body.menuIds = joinMenu(req.body.menuIds)
     fetchUpdate({
       model: Role,
       id: req.params.id,

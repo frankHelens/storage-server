@@ -11,6 +11,7 @@ import menu from './menu'
 import rbac from './rbac'
 import role from './role'
 import config from './config'
+import system from './system'
 
 export const router = express.Router();
 
@@ -30,5 +31,6 @@ router.use('/test', test)
 router.use('/rbac', rbac)
 router.use('/role', role)
 router.use('/config', config)
+router.use('/system', system)
 
 module.exports = router;

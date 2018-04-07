@@ -9,19 +9,22 @@ const User = schema.define('ac_user', {
     autoIncrement: true
   },
   orgId: {
-    type: Sequelize.STRING(255)
+    type: Sequelize.STRING(4)
   },
   loginName: {
-    type: Sequelize.STRING(255)
+    type: Sequelize.STRING(32)
   },
   jobNumber: {
-    type: Sequelize.STRING(255)
+    type: Sequelize.STRING(10)
   },
   name: {
-    type: Sequelize.STRING(255)
+    type: Sequelize.STRING(32)
   },
   loginPassword: {
-    type: Sequelize.STRING(255)
+    type: Sequelize.STRING(64)
+  },
+  roleIds: {
+    type: Sequelize.INTEGER(8)
   },
   // isEnabled: {
   //   type: Sequelize.INTEGER(255),
@@ -40,6 +43,6 @@ const User = schema.define('ac_user', {
   }
 });
 // User.drop(); //删除表
-User.sync(); //创建表
+// User.sync(); //创建表
 
 module.exports = User;

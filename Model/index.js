@@ -8,7 +8,6 @@ import User from './user'
 import Menu from './menu'
 import Role from './role'
 import Config from './config'
-import RoleMenu from './roleMenu'
 
 EnterStockDetail.belongsTo(Product)
 EnterStock.hasOne(EnterStockDetail)
@@ -25,6 +24,5 @@ module.exports = {
   DeliveryStockDetail,
   Menu,
   Role,
-  Config,
-  RoleMenu
+  Config
 }

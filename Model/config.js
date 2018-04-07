@@ -22,6 +22,6 @@ const Config = schema.define('sys_config', {
   }
 });
 // Config.drop(); //删除表
-Config.sync(); //创建表
+// Config.sync(); //创建表
 
 module.exports = Config;
