@@ -18,12 +18,13 @@ export const loginCheck = ({body}) => {
       })
       .then(res => {
         if (res.length) {
-          const { id, loginName, name, loginPassword } = res[0]
+          const { id, loginName, name, loginPassword, roleIds } = res[0]
           const userMessage = {
             userId: id,
             loginName,
             realName: name,
-            loginPassword
+            loginPassword,
+            roleIds
           }
           return Message(0, {
             token: signToken(userMessage)
