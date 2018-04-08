@@ -9,19 +9,24 @@ const Menu = schema.define('ac_menu', {
     autoIncrement:true
   },
   parentId: {
-    type: Sequelize.INTEGER
+    type: Sequelize.INTEGER,
+    defaultValue: 0
   },
   label: {
-    type: Sequelize.STRING(50)
+    type: Sequelize.STRING(50),
+    defaultValue: ''
   },
   url: {
-    type: Sequelize.STRING(100)
+    type: Sequelize.STRING(100),
+    defaultValue: ''
   },
   icon: {
-    type: Sequelize.STRING(24)
+    type: Sequelize.STRING(24),
+    defaultValue: ''
   },
   type: {
-    type: Sequelize.STRING(24)
+    type: Sequelize.STRING(24),
+    defaultValue: ''
   },
   noMenu: {
     type: Sequelize.STRING(1),
@@ -30,7 +35,8 @@ const Menu = schema.define('ac_menu', {
     defaultValue: '0'
   },
   remark: {
-    type: Sequelize.STRING(255)
+    type: Sequelize.STRING(255),
+    defaultValue: ''
   },
   enabled: {
     type: Sequelize.STRING(1),

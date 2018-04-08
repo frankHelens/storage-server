@@ -9,13 +9,16 @@ const EnterStock = schema.define('enter_stock', {
     autoIncrement:true
   },
   code: {
-    type: Sequelize.STRING(255)
+    type: Sequelize.STRING(15),
+    defaultValue: ''
   },
   origin: {
-    type: Sequelize.STRING(255)
+    type: Sequelize.STRING(50),
+    defaultValue: ''
   },
   storageType: {
-    type: Sequelize.STRING(255)
+    type: Sequelize.STRING(12),
+    defaultValue: ''
   },
   enterPrice: {
     type: Sequelize.FLOAT(3),
@@ -24,13 +27,16 @@ const EnterStock = schema.define('enter_stock', {
     }
   },
   takePe: {
-    type: Sequelize.STRING(255)
+    type: Sequelize.STRING(255),
+    defaultValue: ''
   },
   makePe: {
-    type: Sequelize.STRING(255)
+    type: Sequelize.STRING(255),
+    defaultValue: ''
   },
   remark: {
-    type: Sequelize.STRING(255)
+    type: Sequelize.STRING(255),
+    defaultValue: ''
   }
 });
 

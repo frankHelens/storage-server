@@ -9,19 +9,24 @@ const Role = schema.define('ac_role', {
     autoIncrement: true
   },
   roleName: {
-    type: Sequelize.STRING(50)
+    type: Sequelize.STRING(50),
+    defaultValue: ''
   },
   roleDesc: {
-    type: Sequelize.STRING(100)
+    type: Sequelize.STRING(100),
+    defaultValue: ''
   },
   menuIds: {
-    type: Sequelize.STRING(255)
+    type: Sequelize.STRING(255),
+    defaultValue: ''
   },
   enabled: {
-    type: Sequelize.STRING(1)
+    type: Sequelize.STRING(1),
+    defaultValue: ''
   },
   updateUserId: {
-    type: Sequelize.STRING(8)
+    type: Sequelize.STRING(8),
+    defaultValue: ''
   }
 });
 // Role.drop(); //删除表

@@ -27,11 +27,11 @@ export const fetchList = (props) => {
       data: res.rows,
       recordsFiltered: res.count,
       recordsTotal: res.count
-    }, null)
+    }, '')
   })
   .catch((err) => {
     console.log('err：', err)
-    return Message(500, null)
+    return Message(500, err)
   })
 }
 
@@ -44,7 +44,7 @@ export const fetchCreate = (props) => {
   })
   .catch((err) => {
     console.log('err：', err)
-    return Message(500, null, err)
+    return Message(500, '', err)
   })
 }
 
@@ -62,7 +62,7 @@ export const fetchUpdate = (props) => {
   })
   .catch((err) => {
     console.log('err：', err)
-    return Message(500, null, err)
+    return Message(500, '', err)
   })
 }
 
@@ -79,7 +79,7 @@ export const fetchDelete = (props) => {
   })
   .catch((err) => {
     console.log('err：', err)
-    return Message(500, null)
+    return Message(500, '')
   })
 }
 
@@ -96,7 +96,7 @@ export const fetchBatchDelete = (props) => {
   })
   .catch((err) => {
     console.log('err：', err)
-    return Message(500, null)
+    return Message(500, '')
   })
 }
 
@@ -109,7 +109,7 @@ export const fetchBatchCreate = (props) => {
   })
   .catch((err) => {
     console.log('err：', err)
-    return Message(500, null, err)
+    return Message(500, '', err)
   })
 }
 
@@ -122,11 +122,11 @@ export const fetchRelation = (props) => {
     }
   })
   .then((res) => {
-    return Message(0, getRelationList(res), null)
+    return Message(0, getRelationList(res), '')
   })
   .catch((err) => {
     console.log('err：', err)
-    return Message(500, null)
+    return Message(500, '')
   })
 }
 

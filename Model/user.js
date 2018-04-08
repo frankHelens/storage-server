@@ -9,19 +9,24 @@ const User = schema.define('ac_user', {
     autoIncrement: true
   },
   orgId: {
-    type: Sequelize.STRING(4)
+    type: Sequelize.STRING(4),
+    defaultValue: ''
   },
   loginName: {
-    type: Sequelize.STRING(32)
+    type: Sequelize.STRING(32),
+    defaultValue: ''
   },
   jobNumber: {
-    type: Sequelize.STRING(10)
+    type: Sequelize.STRING(10),
+    defaultValue: ''
   },
   name: {
-    type: Sequelize.STRING(32)
+    type: Sequelize.STRING(32),
+    defaultValue: ''
   },
   loginPassword: {
-    type: Sequelize.STRING(64)
+    type: Sequelize.STRING(64),
+    defaultValue: ''
   },
   roleIds: {
     type: Sequelize.INTEGER(8)
@@ -39,7 +44,8 @@ const User = schema.define('ac_user', {
     }
   },
   remark: {
-    type: Sequelize.STRING(255)
+    type: Sequelize.STRING(255),
+    defaultValue: ''
   }
 });
 // User.drop(); //删除表
