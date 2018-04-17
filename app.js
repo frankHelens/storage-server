@@ -30,9 +30,14 @@ app.use(function(request, response, next) {
     next();
 });
 
-app.use('/login', login);
-app.use('/test', test)
-app.use('/*', function (req, res, next) {
+// 文件下载
+app.get('/tool', function (req, res) {
+  res.download('/tool/' + req.query.download)
+})
+
+app.use('/storage/login', login);
+app.use('/storage/test', test)
+app.use('/storage/*', function (req, res, next) {
   // 获取token
   const token = req.headers['frank-access-token']
   const { code, data } = decodeToken(token)
@@ -50,7 +55,7 @@ app.use('/*', function (req, res, next) {
   }
 })
 // 路由
-app.use('/', index);
+app.use('/storage', index);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
